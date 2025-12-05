@@ -9,7 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { UserCheck, Loader2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client.ts';
+import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useQuery } from '@tanstack/react-query';
 

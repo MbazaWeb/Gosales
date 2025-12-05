@@ -12,7 +12,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { ClipboardCheck, UserCheck, Users, ShoppingCart, Loader2, Check, X, AlertTriangle } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client.ts';
+import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';

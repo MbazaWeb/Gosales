@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { MetricCard } from '@/components/dashboard/MetricCard';
 import { StatsGrid } from '@/components/dashboard/StatsGrid';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { supabase } from '@/integrations/supabase/client.ts';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   Users, 
   Target,
