@@ -372,8 +372,18 @@ export function AdminStockManagement() {
 
   // Calculate summary metrics
   const summaryMetrics = {
-    totalDO: stock.filter(item => item.type === 'Decoder Only (DO)' || item.type === 'DO').length,
-    totalFS: stock.filter(item => item.type === 'Full Set (FS)' || item.type === 'FS').length,
+    totalDO: stock.filter(item => {
+      const type = (item.type || '').toUpperCase();
+      return type.includes('DO') || type.includes('DECODER') || type === 'DO';
+    }).length,
+    totalFS: stock.filter(item => {
+      const type = (item.type || '').toUpperCase();
+      return type.includes('FS') || type.includes('FULL SET') || type === 'FS';
+    }).length,
+    totalDVS: stock.filter(item => {
+      const type = (item.type || '').toUpperCase();
+      return type.includes('DVS') || type === 'DVS';
+    }).length,
     assignedStock: stock.filter(item => item.status !== 'unassigned').length,
     unassignedStock: stock.filter(item => item.status === 'unassigned').length,
   };
@@ -381,9 +391,27 @@ export function AdminStockManagement() {
   // Calculate regional stock summary
   const getRegionalMetrics = (regionId?: string) => {
     const filtered = regionId ? stock.filter(item => item.region_id === regionId) : stock;
+    
+    // Count types more flexibly to handle variations in data
+    const totalDO = filtered.filter(item => {
+      const type = (item.type || '').toUpperCase();
+      return type.includes('DO') || type.includes('DECODER') || type === 'DO';
+    }).length;
+    
+    const totalFS = filtered.filter(item => {
+      const type = (item.type || '').toUpperCase();
+      return type.includes('FS') || type.includes('FULL SET') || type === 'FS';
+    }).length;
+    
+    const totalDVS = filtered.filter(item => {
+      const type = (item.type || '').toUpperCase();
+      return type.includes('DVS') || type === 'DVS';
+    }).length;
+    
     return {
-      totalDO: filtered.filter(item => item.type === 'Decoder Only (DO)' || item.type === 'DO').length,
-      totalFS: filtered.filter(item => item.type === 'Full Set (FS)' || item.type === 'FS').length,
+      totalDO,
+      totalFS,
+      totalDVS,
       assignedStock: filtered.filter(item => item.status !== 'unassigned').length,
       unassignedStock: filtered.filter(item => item.status === 'unassigned').length,
       total: filtered.length,
@@ -714,10 +742,10 @@ export function AdminStockManagement() {
           variant="success"
         />
         <MetricCard
-          title="Assigned Stock"
-          value={summaryMetrics.assignedStock}
+          title="Total DVS Stock"
+          value={summaryMetrics.totalDVS}
           icon={Package}
-          variant="primary"
+          variant="info"
         />
         <MetricCard
           title="Unassigned Stock"
@@ -749,6 +777,12 @@ export function AdminStockManagement() {
                 value={getRegionalMetrics(selectedRegion).totalFS}
                 icon={Package}
                 variant="success"
+              />
+              <MetricCard
+                title={`${selectedRegionName} - DVS`}
+                value={getRegionalMetrics(selectedRegion).totalDVS}
+                icon={Package}
+                variant="info"
               />
               <MetricCard
                 title={`${selectedRegionName} - Assigned`}
@@ -807,6 +841,11 @@ export function AdminStockManagement() {
                         <span className="text-muted-foreground">FS:</span>
                         <span className="font-medium text-success">{metrics.totalFS}</span>
                       </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">DVS:</span>
+                        <span className="font-medium text-secondary">{metrics.totalDVS}</span>
+                      </div>
+                      <div className="border-t my-2"></div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Assigned:</span>
                         <span className="font-medium">{metrics.assignedStock}</span>
