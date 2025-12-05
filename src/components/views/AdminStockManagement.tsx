@@ -980,7 +980,18 @@ export function AdminStockManagement() {
                     <TableCell>{item.smartcard_number || '-'}</TableCell>
                     <TableCell>{item.serial_number || '-'}</TableCell>
                     <TableCell>
-                      <Badge variant="outline">{item.type}</Badge>
+                      {(() => {
+                        const type = (item.type || '').toUpperCase();
+                        if (type.includes('DO') || type.includes('DECODER')) {
+                          return <Badge className="bg-primary text-primary-foreground">{item.type}</Badge>;
+                        } else if (type.includes('FS') || type.includes('FULL')) {
+                          return <Badge className="bg-success text-success-foreground">{item.type}</Badge>;
+                        } else if (type.includes('DVS')) {
+                          return <Badge className="bg-info text-info-foreground">{item.type}</Badge>;
+                        } else {
+                          return <Badge variant="outline">{item.type}</Badge>;
+                        }
+                      })()}
                     </TableCell>
                     <TableCell>{(item as any).batch?.batch_number || '-'}</TableCell>
                     <TableCell>{(item as any).region?.name || '-'}</TableCell>
